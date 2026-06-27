@@ -1,94 +1,69 @@
+import { useState } from "react";
+
 interface Source {
-
-    filename: string;
-
-    page: number;
-
-    similarity: number;
-
+filename: string;
+page: number;
+similarity: number;
 }
-
 
 interface Props {
-
-    sources: Source[];
-
+sources: Source[];
 }
 
-
-export default function Sources({
-
-    sources
-
-}: Props) {
+export default function Sources({ sources }: Props) {
 
 
-    if (!sources.length) {
+const [open, setOpen] = useState(false);
 
-        return null;
+if (!sources.length) return null;
 
-    }
+return (
+    <div className="mt-4 rounded-lg bg-zinc-900">
 
+        <button
+            onClick={() => setOpen(!open)}
+            className="flex w-full items-center justify-between p-4 text-white hover:bg-zinc-800 rounded-lg"
+        >
+            <span>
+                📄 Sources ({sources.length})
+            </span>
 
-    return (
+            <span>
+                {open ? "▲" : "▼"}
+            </span>
+        </button>
 
-        <div className="mt-4 rounded-lg bg-zinc-900 p-4">
-
-
-            <h3 className="mb-3 font-semibold text-white">
-
-                Sources
-
-            </h3>
-
-
-
-            <div className="space-y-2">
-
+        {open && (
+            <div className="space-y-2 px-4 pb-4">
 
                 {sources.map((source, index) => (
 
-
                     <div
-
                         key={index}
-
                         className="rounded-lg bg-zinc-800 p-3 text-sm"
-
                     >
 
                         <p className="text-white">
-
-                            📄 {source.filename}
-
+                            {source.filename}
                         </p>
-
 
                         <p className="text-zinc-400">
-
-                            Page: {source.page}
-
+                            Page {source.page}
                         </p>
-
 
                         <p className="text-zinc-400">
-
-                            Match: {(source.similarity * 100).toFixed(1)}%
-
+                            {(source.similarity * 100).toFixed(1)}% match
                         </p>
-
 
                     </div>
 
-
                 ))}
 
-
             </div>
+        )}
 
+    </div>
+);
 
-        </div>
-
-    );
 
 }

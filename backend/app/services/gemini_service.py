@@ -1,30 +1,52 @@
-import google.generativeai as genai
+from google import genai
 
 from app.core.config import GEMINI_API_KEY
 
-genai.configure(api_key=GEMINI_API_KEY)
 
-model = genai.GenerativeModel("gemini-2.5-flash")
+client = genai.Client(
+    api_key=GEMINI_API_KEY
+)
 
 
 class GeminiService:
 
     @staticmethod
-    def answer(question: str, context: str, history):
+    def answer(
+        question: str,
+        context: str,
+        history: str
+    ):
 
         prompt = f"""
-You are ScholarAI.
+You are ScholarAI, an AI assistant that answers questions ONLY using the provided document context.
 
-You answer questions ONLY using the supplied context.
+Instructions:
 
-Rules:
-
-- Never invent information.
-- Never use outside knowledge.
-- If the answer cannot be found in the context, reply exactly:
+Answer ONLY from the supplied context.
+Never use outside knowledge.
+If the answer is not present in the context, reply exactly:
 "I couldn't find that information in the uploaded documents."
-- When answering, mention the page numbers whenever possible.
-- Keep answers clear and concise.
+If relevant related information exists, briefly mention that instead.
+
+Formatting:
+- Write naturally, as if explaining to a student.
+- Use Markdown.
+- Start with a short direct answer.
+- Use headings only when they improve readability.
+- Use bullet points only for lists of features or steps.
+- Avoid unnecessary labels like "Purpose:" or "Core Component:" unless they make the answer clearer.
+- Bold important terms.
+- Avoid repeating information.
+- Keep paragraphs short.
+
+Citations:
+- When mentioning pages, wrap page references in <page>...</page>.
+- Examples:
+    <page>Page 1</page>
+    <page>Pages 2, 6</page>
+- Do not make page references part of the main sentence.
+
+Conversation History:
 
 {history}
 
@@ -45,6 +67,11 @@ Question:
 Answer:
 """
 
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt
+        )
+
+        print(response.text)
 
         return response.text

@@ -35,7 +35,8 @@ def chat(request: ChatRequest):
 
 
     query_embedding = embedding_service.embed(
-        [request.question]
+        [request.question],
+        task_type="RETRIEVAL_QUERY"
     )[0]
 
 
@@ -161,6 +162,11 @@ def chat(request: ChatRequest):
 
         }
 
+    print("=" * 80)
+    print("CONTEXT SENT TO GEMINI")
+    print("=" * 80)
+    print(context)
+    print("=" * 80)
 
 
     answer = GeminiService.answer(

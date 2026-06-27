@@ -1,6 +1,7 @@
 import os
 import shutil
 import uuid
+import traceback
 
 from fastapi import APIRouter, UploadFile, File, HTTPException
 
@@ -25,6 +26,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 )
 async def upload_pdf(file: UploadFile = File(...)):
     try:
+        print("1. Upload received")
         # Generate a unique ID for this document
         document_id = str(uuid.uuid4())
 
@@ -43,7 +45,7 @@ async def upload_pdf(file: UploadFile = File(...)):
 
         # Split into chunks
         chunks = ChunkService.chunk_pages(pages)
-
+        print(f"4. Created {len(chunks)} chunks")
         if not chunks:
             raise HTTPException(
                 status_code=400,
@@ -54,7 +56,7 @@ async def upload_pdf(file: UploadFile = File(...)):
         texts = [chunk["text"] for chunk in chunks]
 
         embeddings = embedding_service.embed(texts)
-
+        print("7. About to store in Chroma")
         # Store vectors in ChromaDB
         VectorService.add_document(
             document_id=document_id,
@@ -75,6 +77,12 @@ async def upload_pdf(file: UploadFile = File(...)):
         raise
 
     except Exception as e:
+
+        print("=" * 80)
+        print("UPLOAD FAILED")
+        traceback.print_exc()
+        print("=" * 80)
+
         raise HTTPException(
             status_code=500,
             detail=f"Upload failed: {str(e)}"
