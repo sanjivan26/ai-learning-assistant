@@ -4,8 +4,6 @@ python-multipart
 
 chromadb
 
-sentence-transformers
-
 google-generativeai
 
 PyMuPDF
