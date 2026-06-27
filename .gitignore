@@ -1,0 +1,50 @@
+# ======================
+# Python Backend
+# ======================
+
+# Virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Environment variables
+.env
+
+
+# ======================
+# FastAPI / Storage
+# ======================
+
+# Uploaded PDFs
+backend/uploads/
+
+# Chroma vector database
+backend/chroma_db/
+
+
+# ======================
+# Frontend
+# ======================
+
+frontend/node_modules/
+
+frontend/dist/
+
+
+# ======================
+# IDE
+# ======================
+
+.vscode/
+
+.idea/
+
+
+# ======================
+# OS
+# ======================
+
+.DS_Store
+Thumbs.db

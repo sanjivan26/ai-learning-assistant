@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+python-multipart
+
+chromadb
+
+sentence-transformers
+
+google-generativeai
+
+PyMuPDF
+
+python-dotenv
+
+pydantic
+
+numpy
